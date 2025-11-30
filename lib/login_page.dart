@@ -20,7 +20,7 @@ class _LoginPageState extends State<LoginPage> {
     String username = _usernameController.text;
     String password = _passwordController.text;
 
-    User? user = await DbHelper.instance.login(username, password);
+    User? user = await DBHelper.instance.login(username, password);
     
     if (user != null) {
       await SessionManager.saveUser(username);
@@ -28,11 +28,7 @@ class _LoginPageState extends State<LoginPage> {
         context,
         MaterialPageRoute(builder: (context) => const HomePage()),
       );
-    } else {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('username atau password salah')),
-      );
-    }
+    } 
   }
 
   @override

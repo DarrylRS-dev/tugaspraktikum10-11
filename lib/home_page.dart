@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'main.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -10,26 +9,29 @@ class HomePage extends StatelessWidget {
       appBar: AppBar(
         title: const Text('Home Page'),
       ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            const Text(
+      body: ListView(
+        padding: const EdgeInsets.all(16),
+        children: const [
+          Center(
+            child: Text(
               'Welcome to the Home Page!',
               style: TextStyle(fontSize: 24),
             ),
-            const SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: () {
-                Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(builder: (context) => const MyApp()),
-                );
-              },
-              child: const Text('Logout'),
-            ),
-          ],
-        ),
+          ),
+          SizedBox(height: 20),
+          
+          ListTile(
+            leading: Icon(Icons.person),
+            title: Text('Profil'),
+            trailing: Icon(Icons.arrow_forward_ios, size: 16),
+          ),
+
+          ListTile(
+            leading: Icon(Icons.logout),
+            title: Text('Keluar'),
+            trailing: Icon(Icons.arrow_forward_ios, size: 16),
+          ),
+        ],
       ),
     );
   }

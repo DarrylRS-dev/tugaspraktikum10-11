@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:sepuluh/database/db_helper.dart';
-import 'package:sepuluh/model/user.dart';
+import '../model/user.dart';
+import '../database/db_helper.dart';
 
 class RegisterPage extends StatefulWidget {
   const RegisterPage({super.key});
@@ -13,34 +13,27 @@ class _RegisterPageState extends State<RegisterPage> {
   final _usernameController = TextEditingController();
   final _passwordController = TextEditingController();
 
-  Future<void> _register() async {
+  void _register() async{
     String username = _usernameController.text;
     String password = _passwordController.text;
 
-    if(username.isNotEmpty || password.isNotEmpty) {
+    if (username.isEmpty || password.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Username dan PW tidak boleh kosong')),
+        const SnackBar(content: Text("Please enter both username and password")),
       );
       return;
     }
-
     User newUser = User(username: username, password: password);
 
     try{
-      await DbHelper.instance.registerUser(newUser);
+      await DBHelper.instance.registerUser(newUser, password);
 
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Pendaftaran Berhasil')),
-      );
-
+        const SnackBar(content: Text("Registrasi berhasil!")),);
       Navigator.pop(context);
-    }catch(e) {
+    } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('Registrasi Gagal')),
-      );
+        SnackBar(content: Text("Registrasi gagal")),);
     }
   }
 

@@ -4,7 +4,7 @@ import 'login_page.dart';
 import 'session_manager.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
@@ -21,11 +21,13 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: FutureBuilder<Widget>(
+      home: FutureBuilder(
         future: _getHome(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(child: CircularProgressIndicator());
+            return const Scaffold( 
+              body: Center(child: CircularProgressIndicator()),
+            );
           } else {
             return snapshot.data ?? const LoginPage();
           }
