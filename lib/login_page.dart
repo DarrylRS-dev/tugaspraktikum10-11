@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'home_page.dart';
 import 'register_page.dart';
 import 'session_manager.dart';
-import '../database/db_helper.dart';
-import '../model/user.dart';
+import 'database/db_helper.dart';
+import 'model/user.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -19,16 +19,32 @@ class _LoginPageState extends State<LoginPage> {
   void _login() async {
     String username = _usernameController.text;
     String password = _passwordController.text;
+    try {
+      User? user = await DBHelper.instance.login(username, password);
 
-    User? user = await DBHelper.instance.login(username, password);
-    
-    if (user != null) {
-      await SessionManager.saveUser(username);
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (context) => const HomePage()),
+      if (user != null) {
+        await SessionManager.saveUser(username);
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => const HomePage()),
+        );
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Username atau password salah')),
+        );
+      }
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Terjadi kesalahan: $e')),
       );
-    } 
+    }
+  }
+
+  @override
+  void dispose() {
+    _usernameController.dispose();
+    _passwordController.dispose();
+    super.dispose();
   }
 
   @override

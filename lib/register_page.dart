@@ -13,9 +13,9 @@ class _RegisterPageState extends State<RegisterPage> {
   final _usernameController = TextEditingController();
   final _passwordController = TextEditingController();
 
-  void _register() async{
-    String username = _usernameController.text;
-    String password = _passwordController.text;
+  void _register() async {
+    String username = _usernameController.text.trim();
+    String password = _passwordController.text.trim();
 
     if (username.isEmpty || password.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -23,17 +23,22 @@ class _RegisterPageState extends State<RegisterPage> {
       );
       return;
     }
+
     User newUser = User(username: username, password: password);
 
-    try{
-      await DBHelper.instance.registerUser(newUser, password);
+    try {
+      // HANYA panggil registerUser(user) -- tidak ada parameter kedua
+      await DBHelper.instance.registerUser(newUser);
 
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text("Registrasi berhasil!")),);
+        const SnackBar(content: Text("Registrasi berhasil!")),
+      );
+
       Navigator.pop(context);
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text("Registrasi gagal")),);
+        SnackBar(content: Text("Registrasi gagal: $e")),
+      );
     }
   }
 
@@ -56,7 +61,10 @@ class _RegisterPageState extends State<RegisterPage> {
               decoration: const InputDecoration(labelText: "Password"),
             ),
             const SizedBox(height: 20),
-            ElevatedButton(onPressed: _register, child: const Text("Daftar")),
+            ElevatedButton(
+              onPressed: _register,
+              child: const Text("Daftar"),
+            ),
           ],
         ),
       ),

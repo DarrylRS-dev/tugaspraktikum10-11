@@ -9,7 +9,6 @@ class DBHelper {
 
   Future<Database> get database async {
     if (_database != null) return _database!;
-
     _database = await _initDB('auth_user.db');
     return _database!;
   }
@@ -30,8 +29,21 @@ class DBHelper {
     ''');
   }
 
-  // Method to insert a new user
-  Future<int> registerUser(User user, String password) async {
+  // Cek apakah username sudah ada
+  Future<bool> userExists(String username) async {
+    final db = await instance.database;
+
+    final result = await db.query(
+      'users',
+      where: 'username = ?',
+      whereArgs: [username],
+    );
+
+    return result.isNotEmpty;
+  }
+
+  // Daftar user baru
+  Future<int> registerUser(User user) async {
     final db = await instance.database;
     return await db.insert('users', user.toMap());
   }
@@ -49,7 +61,6 @@ class DBHelper {
     if (result.isNotEmpty) {
       return User.fromMap(result.first);
     }
-
     return null;
   }
 }
