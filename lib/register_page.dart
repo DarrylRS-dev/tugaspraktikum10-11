@@ -10,8 +10,8 @@ class RegisterPage extends StatefulWidget {
 }
 
 class _RegisterPageState extends State<RegisterPage> {
-  final _usernameController = TextEditingController();
-  final _passwordController = TextEditingController();
+  final TextEditingController _usernameController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
 
   void _register() async {
     String username = _usernameController.text.trim();
@@ -19,19 +19,17 @@ class _RegisterPageState extends State<RegisterPage> {
 
     if (username.isEmpty || password.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text("Please enter both username and password")),
+        const SnackBar(content: Text("Isi username dan password")),
       );
       return;
     }
 
-    User newUser = User(username: username, password: password);
+    User user = User(username: username, password: password);
 
     try {
-      // HANYA panggil registerUser(user) -- tidak ada parameter kedua
-      await DBHelper.instance.registerUser(newUser);
-
+      await DBHelper.instance.registerUser(user);
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text("Registrasi berhasil!")),
+        const SnackBar(content: Text("Registrasi berhasil")),
       );
 
       Navigator.pop(context);
@@ -45,25 +43,49 @@ class _RegisterPageState extends State<RegisterPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text("Register")),
+      appBar: AppBar(
+        title: const Text("Register"),
+        backgroundColor: Colors.orange,
+      ),
       body: Padding(
-        padding: const EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(20),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
+            const Text(
+              "Buat Akun",
+              style: TextStyle(fontSize: 18),
+            ),
+            const SizedBox(height: 20),
+
             TextField(
               controller: _usernameController,
-              decoration: const InputDecoration(labelText: "Username"),
+              decoration: const InputDecoration(
+                labelText: "Username",
+                border: OutlineInputBorder(),
+              ),
             ),
+            const SizedBox(height: 15),
+
             TextField(
               controller: _passwordController,
               obscureText: true,
-              decoration: const InputDecoration(labelText: "Password"),
+              decoration: const InputDecoration(
+                labelText: "Password",
+                border: OutlineInputBorder(),
+              ),
             ),
             const SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: _register,
-              child: const Text("Daftar"),
+
+            SizedBox(
+              width: double.infinity,
+              child: ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.white,
+                ),
+                onPressed: _register,
+                child: const Text("Daftar"),
+              ),
             ),
           ],
         ),

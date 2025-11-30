@@ -24,4 +24,11 @@ class SessionManager{
     final prefs = await SharedPreferences.getInstance();
     await prefs.clear();
   }
+
+  // Tambahkan ini agar tidak error
+  static Future<void> clearUser() async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.remove(keyUsername);
+    await prefs.setBool(keyIsLoggedIn, false);
+  }
 }

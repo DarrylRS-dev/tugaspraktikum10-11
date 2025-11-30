@@ -4,11 +4,12 @@ import 'login_page.dart';
 import 'session_manager.dart';
 
 void main() {
-  runApp(MyApp());
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
+
   Future<Widget> _getHome() async {
     bool loggedIn = await SessionManager.isLoggedIn();
     return loggedIn ? const HomePage() : const LoginPage();
@@ -17,20 +18,31 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       title: 'Flutter Auth Demo',
+
+      // Tema oranye yang kamu minta
       theme: ThemeData(
-        primarySwatch: Colors.blue,
+        primaryColor: Colors.orange,
+        colorScheme: ColorScheme.fromSeed(
+          seedColor: Colors.orange,
+          primary: Colors.orange,
+        ),
+        useMaterial3: true,
       ),
+
       home: FutureBuilder(
         future: _getHome(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Scaffold( 
-              body: Center(child: CircularProgressIndicator()),
+            return const Scaffold(
+              body: Center(
+                child: CircularProgressIndicator(color: Colors.orange),
+              ),
             );
-          } else {
-            return snapshot.data ?? const LoginPage();
           }
+
+          return snapshot.data ?? const LoginPage();
         },
       ),
     );
